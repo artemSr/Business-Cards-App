@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="page-content-wrapper">
+        <header>
+            <div class="header-wrapper">
+                <h1>Business cards</h1>
+                <p>Koroka Solutions candidate evaluation task</p>
+            </div>
+        </header>
+        <div class="content">
+                <ul></ul>
+                <button class="moreUsers">Load More</button>
+        </div>
+    </div>
+    <footer>
+        <h1>Introduced by </h1>
+    </footer>
+</div>
+<script>
+
+let users = 3
+let userData;
+$.getJSON('/api/users', function(data) {
+    $.each( data, function( key, user ) {
+        if (user.id <= users){
+            $('ul').append(
+            "<li id='" + user.id + "'>" +
+                "<div class='content-wrapper'>" +
+                    "<div class='imageWrapper'>" +
+                        '<img src="' + user.avatar + '"/>'+
+                    "</div>" +
+                    "<div class='info-wrapper'>" +
+                        "<h1>" + user.first_name.toUpperCase()+ ' ' + user.last_name.toUpperCase() + "</h1>" +
+                        "<p>" + user.email + "</p>" +
+                    "</div>" +
+                "</div>" +
+            "</li>");
+        }
+    });
+    users += 3;
+    userData = data;
+});
+$('.moreUsers').on('click', function (){
+    userData.splice(0,3);
+    if (userData.length === 0){
+        $('.moreUsers').replaceWith('<p class="notification">This ara all cards that we have :(</p>')
+    }
+    $.each( userData, function( key, user ) {
+        if (user.id <= users) {
+            $('ul').append(
+            "<li id='" + user.id + "'>" +
+                "<div class='content-wrapper'>" +
+                    "<div class='imageWrapper'>" +
+                        '<img src="' + user.avatar + '"/>'+
+                    "</div>" +
+                    "<div class='info-wrapper'>" +
+                        "<h1>" + user.first_name.toUpperCase()+ ' ' + user.last_name.toUpperCase() + "</h1>" +
+                        "<p>" + user.email + "</p>" +
+                    "</div>" +
+                "</div>" +
+            "</li>");
+        }
+    });
+    users += 3;
+})
+</script>
+</body>
+</html>
